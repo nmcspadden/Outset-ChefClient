@@ -1,4 +1,4 @@
-Outset-PuppetAgent
+Outset-ChefClient
 ====
 
-A simple Whitebox Packages project that installs the PreparePuppet.sh script to `/usr/local/outset/firstboot-scripts/` to aid Puppet bootstrapping.
+A simple Whitebox Packages project that installs the run_chef.sh script to `/usr/local/outset/firstboot-scripts/` to aid Chef bootstrapping.
