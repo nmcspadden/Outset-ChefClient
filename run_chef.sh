@@ -3,7 +3,8 @@
 # Stolen from PSU:
 # https://wikispaces.psu.edu/display/clcmaclinuxwikipublic/First+Boot+Script
 
-echo "Waiting for network access"
+echo "Starting run: `date`" >> /var/log/chef_outset.log
+echo "Waiting for network access" >> /var/log/chef_outset.log
 /usr/sbin/scutil -w State:/Network/Global/DNS -t 180
 sleep 5
 
@@ -16,8 +17,14 @@ if [[ `system_profiler SPHardwareDataType | grep VMware` || `system_profiler SPH
 fi
 
 /usr/sbin/scutil --set HostName "$serial.sacredsf.org"
-/usr/sbin/scutil --set LocalHostName "$serial.sacredsf.org"
+/usr/sbin/scutil --set LocalHostName "$serial-sacredsf-org"
 /usr/sbin/scutil --set ComputerName "$serial.sacredsf.org"
 
+echo "Hostname: `/usr/sbin/scutil --get HostName`" >> /var/log/chef_outset.log
+echo "LocalHostname: `/usr/sbin/scutil --get LocalHostName`" >> /var/log/chef_outset.log
+echo "ComputerName: `/usr/sbin/scutil --get ComputerName`" >> /var/log/chef_outset.log
 
-/usr/bin/chef-client --runlist "recipe[x509::chef-ca]"
+
+echo "Starting chef-client..." >> /var/log/chef_outset.log
+/usr/bin/chef-client --force-logger -L /var/log/chef_outset.log -l debug --once --runlist "recipe[x509::munki2_client]"
+echo "Finished chef-client." >> /var/log/chef_outset.log
